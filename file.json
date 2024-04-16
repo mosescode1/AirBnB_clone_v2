@@ -13,5 +13,15 @@
     "latitude": 37.773972,
     "longitude": -122.431297,
     "__class__": "Place"
+  },
+  "User.39cb254b-44d0-4c07-ad7f-9d8b7c637e96": {
+    "id": "39cb254b-44d0-4c07-ad7f-9d8b7c637e96",
+    "created_at": "2024-04-16T15:26:31.872028",
+    "updated_at": "2024-04-16T15:26:31.872051",
+    "email": "my@me.com",
+    "password": "pwd",
+    "first_name": "FN",
+    "last_name": "LN",
+    "__class__": "User"
   }
 }
