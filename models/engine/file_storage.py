@@ -56,6 +56,12 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
+        """Deletes an instance from the __objects storage
+
+        Args:
+            obj (Object): _description_. Defaults to None.
+            else delete the instance object
+        """
         if obj is None:
             return
         class_name = obj.to_dict()['__class__']
