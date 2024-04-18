@@ -67,7 +67,7 @@ class DBStorage:
             return {f"{obj.__class__.__name__}": obj for obj in object}
 
     def new(self, obj):
-        """saves the new instance created"""
+        """saves the new instance created to database"""
         self.__session.add(obj)
 
     def save(self):
@@ -85,3 +85,6 @@ class DBStorage:
         Session = scoped_session(sessionmaker(
             bind=self.__engine, expire_on_commit=False))
         self.__session = Session()
+
+    # def close(self):
+    #     self.__session.close(self)

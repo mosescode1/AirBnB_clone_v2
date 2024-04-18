@@ -209,19 +209,21 @@ class HBNBCommand(cmd.Cmd):
 
         args = line.split()
         if not args:
-            print([str(value) for value in storage.all().values()])
+            for value in storage.all().values():
+                if "_sa_instance_state" in value.__dict__:
+                    del value.__dict__["_sa_instance_state"]
+                print(value)
             return
         class_name = args[0]
 
         if class_name not in HBNBCommand.classes:
             print('** class doesn\'t exist **')
         else:
-            # storage.all(class_name)
-            list_obj = []
             for value in storage.all(class_name).values():
                 if value.__class__.__name__ == class_name:
-                    list_obj.append(str(value))
-            print(list_obj)
+                    if "_sa_instance_state" in value.__dict__:
+                        del value.__dict__["_sa_instance_state"]
+                    print(value)
 
     def help_all(self):
         """ Help information for the all command """

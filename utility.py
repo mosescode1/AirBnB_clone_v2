@@ -10,8 +10,8 @@ def dict_converter(values):
         key = dict_val[0]
         value = dict_val[1]
         temp_dict.update({key: value})
-    new = val_returner(temp_dict)
-    return new
+
+    return val_returner(temp_dict)
 
 
 def val_returner(value):
@@ -21,7 +21,7 @@ def val_returner(value):
             temp2[key] = val.rstrip('"').lstrip('"')
             if "_" in temp2[key]:
                 temp2[key] = temp2[key].replace("_", " ")
-        elif val.count("."):
+        elif val.count(".") == 1:
             try:
                 temp2[key] = float(val)
             except Exception:

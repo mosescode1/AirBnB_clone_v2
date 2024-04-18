@@ -10,6 +10,5 @@ class City(BaseModel, Base):
     state_id = Column("state_id", String(
         60), ForeignKey("states.id"), nullable=False)
     name = Column("name", String(128))
-
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
