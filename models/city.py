@@ -13,5 +13,6 @@ class City(BaseModel, Base):
     name = Column("name", String(128))
     places = relationship("Place", backref="cities",
                           cascade="all, delete-orphan")
+
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)

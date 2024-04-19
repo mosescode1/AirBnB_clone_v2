@@ -26,7 +26,7 @@ class State(BaseModel, Base):
             import models
             temp = {}
             for k, v in models.storage.all(City).items():
-                if v.to_dict()["state_id"] == self.id:
+                if v.to_dict()["State.id"] == self.id:
                     temp.update({k, v})
             return temp
             # if value.to_dict()["state_id"] == self.id:
