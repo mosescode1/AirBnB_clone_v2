@@ -13,9 +13,13 @@ echo "<html>
     Holberton School
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
-sudo ln -s /data/web_static/releases/test/ /data/web_static/current
+if [ -L /data/web_static/current ];
+then
+        sudo rm -rf /data/web_static/current
+fi
+
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 sudo sed -i "s#server_name _;#$new_string#"  /etc/nginx/sites-enabled/default
 sudo sed -i "s#root /var/www/html/;#$string2#"  /etc/nginx/sites-enabled/default
 sudo service nginx reload
-
