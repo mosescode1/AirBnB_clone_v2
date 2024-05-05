@@ -2,7 +2,7 @@
 # configuring my web servers for deployment
 sudo apt-get update -y
 sudo apt-get -y install nginx
-sudo service nginx start
+
 new_string="server_name _;\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}"
 string2=" root /data/web_static/current/;"
 # making dirctories 
