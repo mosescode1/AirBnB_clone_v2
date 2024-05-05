@@ -10,7 +10,7 @@ from datetime import datetime
 def do_pack():
     """Web_static compressor"""
     local("mkdir -p versions")
-    result = local("tar -cvzf versions/web_static_{}.tgz web_static"
+    result = local("tar -czfv  versions/web_static_{}.tgz web_static"
                    .format(datetime.strftime(datetime.now(), "%Y%m%d%H%M%S")),
                    capture=True)
     if result.failed:
