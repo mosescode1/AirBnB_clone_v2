@@ -1,30 +1,32 @@
 #!/usr/bin/python3
-"""Deploying an Archive to my server"""
-from fabric.api import *
+"""
+With Facric , creates a tgz archive
+from web_static content folder
+"""
+
+from fabric.api import env, local, put, run
 from datetime import datetime
-import sys
-from os.path import *
-
-if len(sys.argv) > 1:
-    env.user = sys.argv[-1]
-    env.key_filename = sys.argv[-3]
-else:
-    print("Please provide a user argument.")
-    sys.exit(1)
-
-env.hosts = ["107.23.92.1", "100.26.249.41"]
+from os.path import exists, isdir
+env.hosts = ['54.90.16.59', '100.25.150.206']
+env.user = 'ubuntu'
+env.key_filename = '~/.ssh/school'
 
 
-def deploy_arch(archive_path):
-    """
-    Deploy a web static archive to the web servers.
+def do_pack():
+    """Creates a tgz archive using fabric"""
+    try:
+        date = datetime.now().strftime("%Y%m%d%H%M%S")
+        if isdir("versions") is False:
+            local("mkdir versions")
+        filename = "versions/web_static_{}.tgz".format(date)
+        local("tar -cvzf {} web_static".format(filename))
+        return filename
+    except Exception as ex:
+        return None
 
-    Args:
-        archive_path (str): The path to the archive file.
 
-    Returns:
-        bool: True if the deployment is successful, False otherwise.
-    """
+def do_deploy(archive_path):
+    """deploy web static with fabric"""
     if exists(archive_path) is False:
         return False
 
@@ -45,49 +47,9 @@ def deploy_arch(archive_path):
         return False
 
 
-def do_deploy(archive_path):
-    """
-    Deploy the specified archive to the remote server.
-
-    Args:
-        archive_path (str): The path to the archive file.
-
-    Returns:
-        bool: True if the deployment is successful, False otherwise.
-    """
-    return deploy_arch(archive_path)
-
-
-file_name = "web_static_{}.tgz".format(datetime.now().strftime("%Y%m%d%H%M%S"))
-
-
-def do_pack():
-    """ Function to generate tgz file"""
-
-    try:
-        local("mkdir -p versions")
-        result = local(f"tar -czvf versions/{file_name} web_static")
-        path = abspath(f"versions/{file_name}")
-        size = getsize(path)
-        # print(path)
-        if result.failed:
-            return None
-        print(f"web_static packed: versions/{file_name} -> {size}Bytes")
-        return path
-    except Exception:
-        return False
-
-
 def deploy():
-    """
-    Deploys the web static files by calling the
-    `do_pack` and `do_deploy` functions.
-
-    Returns:
-        bool: True if the deployment is successful, False otherwise.
-    """
-    path = do_pack()
-    if path is None:
+    """ do path an do deploy"""
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    else:
-        return do_deploy(path)
+    return do_deploy(archive_path)
