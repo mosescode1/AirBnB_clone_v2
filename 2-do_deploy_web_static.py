@@ -6,6 +6,7 @@ import os
 
 if len(sys.argv) > 1:
     env.user = sys.argv[-1]
+    env.key_filename = sys.argv[-3]
 else:
     print("Please provide a user argument.")
     sys.exit(1)
