@@ -4,14 +4,17 @@ from fabric.api import *
 import sys
 import os
 
-env.user = sys.argv[-1]
-env.key_filename = sys.argv[-3]
-
+if len(sys.argv) > 1:
+    env.user = sys.argv[-1]
+    env.key_filename = sys.argv[-3]
+else:
+    print("Please provide a user argument.")
+    sys.exit(1)
 
 env.hosts = ["107.23.92.1", "100.26.249.41"]
 
 
-def do_deploy(archive_path):
+def deploy(archive_path):
     """
     Deploy a web static archive to the web servers.
 
@@ -22,6 +25,7 @@ def do_deploy(archive_path):
         bool: True if the deployment is successful, False otherwise.
     """
     if not os.path.isfile(archive_path):
+        print(f"The file {archive_path} does not exist.")
         return False
 
     try:
@@ -40,4 +44,18 @@ def do_deploy(archive_path):
         print("New version deployed")
         return True
     except Exception as e:
+        print(f"An error occurred: {e}")
         return False
+
+
+def do_deploy(archive_path):
+    """
+    Deploy the specified archive to the remote server.
+
+    Args:
+        archive_path (str): The path to the archive file.
+
+    Returns:
+        bool: True if the deployment is successful, False otherwise.
+    """
+    return deploy(archive_path)
