@@ -4,9 +4,13 @@ from fabric.api import *
 import sys
 import os
 
+if len(sys.argv) > 1:
+    env.user = sys.argv[-1]
+else:
+    print("Please provide a user argument.")
+    sys.exit(1)
 
 env.hosts = ["107.23.92.1", "100.26.249.41"]
-env.user = sys.argv[-1]
 
 
 def deploy(archive_path):
@@ -19,10 +23,11 @@ def deploy(archive_path):
     Returns:
         bool: True if the deployment is successful, False otherwise.
     """
-    success = True
+    if not os.path.isfile(archive_path):
+        print(f"The file {archive_path} does not exist.")
+        return False
+
     try:
-        if not os.path.isfile(archive_path):
-            return False
         put(archive_path, "/tmp/")
         file_name = os.path.basename(archive_path).replace(".tgz", "")
         run(f"mkdir -p /data/web_static/releases/{file_name}")
@@ -33,14 +38,11 @@ def deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run(
             f"ln -s /data/web_static/releases/{file_name}/ /data/web_static/current")
-
-    except Exception as e:
-        success = False
-
-    if success:
         print("New version deployed")
-        return success
-    return success
+        return True
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
 
 
 def do_deploy(archive_path):
@@ -51,6 +53,6 @@ def do_deploy(archive_path):
         archive_path (str): The path to the archive file.
 
     Returns:
-        None
+        bool: True if the deployment is successful, False otherwise.
     """
-    deploy(archive_path)
+    return deploy(archive_path)
