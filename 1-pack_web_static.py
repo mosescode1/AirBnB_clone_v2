@@ -4,7 +4,7 @@ from fabric.api import local
 from datetime import datetime
 import os
 
-file_name = "web_static_{}.tgz".format(datetime.now().strftime("%Y%m%d%H%M"))
+file_name = "web_static_{}.tgz".format(datetime.now().strftime("%Y%m%d%H%M%S"))
 
 def do_pack():
     """ Function to generate tgz file"""
