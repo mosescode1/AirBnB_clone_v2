@@ -31,14 +31,15 @@ def deploy(archive_path):
     try:
         put(archive_path, "/tmp/")
         file_name = os.path.basename(archive_path).replace(".tgz", "")
-        run(f"mkdir -p /data/web_static/releases/{file_name}")
+        run(f"mkdir -p /data/web_static/releases/{file_name}/")
         run(f"tar -xzf /tmp/{file_name}.tgz -C /data/web_static/releases/{file_name}/")
         run(f"rm /tmp/{file_name}.tgz")
-        run(f"mv /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}/")
+        run(
+            f"mv /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}/"
+        )
         run(f"rm -rf /data/web_static/releases/{file_name}/web_static")
         run("rm -rf /data/web_static/current")
-        run(
-            f"ln -s /data/web_static/releases/{file_name}/ /data/web_static/current")
+        run(f"ln -s /data/web_static/releases/{file_name}/ /data/web_static/current")
         print("New version deployed")
         return True
     except Exception as e:
