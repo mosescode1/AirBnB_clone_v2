@@ -11,7 +11,7 @@ env.key_filename = sys.argv[-3]
 env.hosts = ["107.23.92.1", "100.26.249.41"]
 
 
-def deploy(archive_path):
+def do_deploy(archive_path):
     """
     Deploy a web static archive to the web servers.
 
