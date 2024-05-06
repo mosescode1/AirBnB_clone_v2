@@ -11,7 +11,7 @@ env.key_filename = sys.argv[-3]
 env.hosts = ["107.23.92.1", "100.26.249.41"]
 
 
-def deploy(archive_path):
+def do_deploy(archive_path):
     """
     Deploy a web static archive to the web servers.
 
@@ -38,21 +38,9 @@ def deploy(archive_path):
         )
         run(f"rm -rf /data/web_static/releases/{file_name}/web_static")
         run("rm -rf /data/web_static/current")
-        run(f"ln -s /data/web_static/releases/{file_name}/ /data/web_static/current")
+        run(
+            f"ln -s /data/web_static/releases/{file_name}/ /data/web_static/current")
         print("New version deployed!")
         return True
     except Exception as e:
         return False
-
-
-def do_deploy(archive_path):
-    """
-    Deploy the specified archive to the remote server.
-
-    Args:
-        archive_path (str): The path to the archive file.
-
-    Returns:
-        bool: True if the deployment is successful, False otherwise.
-    """
-    return deploy(archive_path)
