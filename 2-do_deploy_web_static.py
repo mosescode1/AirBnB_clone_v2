@@ -24,7 +24,7 @@ def deploy(archive_path):
     Returns:
         bool: True if the deployment is successful, False otherwise.
     """
-    if not os.path.isfile(archive_path):
+    if os.path.exists(archive_path) is False:
         return False
 
     try:
