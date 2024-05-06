@@ -25,7 +25,6 @@ def deploy(archive_path):
         bool: True if the deployment is successful, False otherwise.
     """
     if not os.path.isfile(archive_path):
-        print(f"The file {archive_path} does not exist.")
         return False
 
     try:
@@ -44,7 +43,6 @@ def deploy(archive_path):
         print("New version deployed")
         return True
     except Exception as e:
-        print(f"An error occurred: {e}")
         return False
 
 
