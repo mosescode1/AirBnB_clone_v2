@@ -80,7 +80,8 @@ def do_pack():
 
 def deploy():
     """
-    Deploys the web static files by calling the `do_pack` and `do_deploy` functions.
+    Deploys the web static files by calling the
+    `do_pack` and `do_deploy` functions.
 
     Returns:
         bool: True if the deployment is successful, False otherwise.
