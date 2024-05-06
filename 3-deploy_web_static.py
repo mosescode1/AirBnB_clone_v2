@@ -3,7 +3,7 @@
 from fabric.api import *
 from datetime import datetime
 import sys
-import os
+from os.path import *
 
 if len(sys.argv) > 1:
     env.user = sys.argv[-1]
@@ -25,33 +25,23 @@ def deploy_arch(archive_path):
     Returns:
         bool: True if the deployment is successful, False otherwise.
     """
-    if os.path.exists(archive_path) is False:
+    if exists(archive_path) is False:
         return False
 
     try:
-        put(archive_path, "/tmp/")
-        file_name = os.path.basename(archive_path).replace(".tgz", "")
-        run(
-            f"mkdir -p /data/web_static/releases/{file_name}/"
-        )
-        file = f"xzf /tmp/{file_name}.tgz"
-        run(
-            f"tar - {file} - C /data/web_static/releases/{file_name} /"
-        )
-        run(f"rm /tmp/{file_name}.tgz")
-        mv_1 = f"/data/web_static/releases/{file_name}/web_static/*"
-        run(
-            f"mv {mv_1} /data/web_static/releases/{file_name}/"
-        )
-        run(f"rm -rf /data/web_static/releases/{file_name}/web_static")
-        run("rm -rf /data/web_static/current")
-        mv_2 = "/data/web_static/releases/{file_name}/"
-        run(
-            f"ln -s {mv_2} /data/web_static/current"
-        )
-        print("New version deployed")
+        filename = archive_path.split("/")[-1]
+        no_excep = filename.split(".")[0]
+        path = "/data/web_static/releases/"
+        put(archive_path, '/tmp/')
+        run('sudo mkdir -p {}{}/'.format(path, no_excep))
+        run('sudo tar -xzf /tmp/{} -C {}{}/'.format(filename, path, no_excep))
+        run('sudo rm /tmp/{}'.format(filename))
+        run('sudo mv {0}{1}/web_static/* {0}{1}/'.format(path, no_excep))
+        run('sudo rm -rf {}{}/web_static'.format(path, no_excep))
+        run('sudo rm -rf /data/web_static/current')
+        run('sudo ln -s {}{}/ /data/web_static/current'.format(path, no_excep))
         return True
-    except Exception as e:
+    except BaseException:
         return False
 
 
@@ -73,15 +63,19 @@ file_name = "web_static_{}.tgz".format(datetime.now().strftime("%Y%m%d%H%M%S"))
 
 def do_pack():
     """ Function to generate tgz file"""
-    local("mkdir -p versions")
-    result = local(f"tar -czvf versions/{file_name} web_static")
-    path = os.path.abspath(f"versions/{file_name}")
-    size = os.path.getsize(path)
-    # print(path)
-    if result.failed:
-        return None
-    print(f"web_static packed: versions/{file_name} -> {size}Bytes")
-    return path
+
+    try:
+        local("mkdir -p versions")
+        result = local(f"tar -czvf versions/{file_name} web_static")
+        path = abspath(f"versions/{file_name}")
+        size = getsize(path)
+        # print(path)
+        if result.failed:
+            return None
+        print(f"web_static packed: versions/{file_name} -> {size}Bytes")
+        return path
+    except Exception:
+        return False
 
 
 def deploy():
@@ -91,11 +85,7 @@ def deploy():
     Returns:
         bool: True if the deployment is successful, False otherwise.
     """
-    try:
-        path = do_pack()
-    except Exception as e:
+    path = do_pack()
+    if path is None:
         return False
-    try:
-        return do_deploy(path)
-    except Exception as e:
-        pass
+    return do_deploy(path)
