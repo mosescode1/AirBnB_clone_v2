@@ -1,7 +1,7 @@
 #!/usr/bin/python3
+"""Strorage is an instance of FileStorage or DBStorage"""
 from flask import Flask, render_template
 from models import storage
-"""Strorage is an instance of FileStorage or DBStorage"""
 
 app = Flask(__name__)
 

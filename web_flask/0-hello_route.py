@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from flask import Flask
 """Flask Initilization"""
+from flask import Flask
 # from web_flask import app
 
 app = Flask(__name__)
@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 @app.route("/", strict_slashes=False)
 def home():
+    """Flask Home page"""
     return "Hello HBNB!"
 
 
