@@ -21,8 +21,9 @@ def c_route(text):
     return "C {}".format(text.replace("_", " "))
 
 
+@app.route("/python/", defaults={'text': 'is cool'})
 @app.route("/python/<text>", strict_slashes=False)
-def python_route(text="is cool"):
+def python_route(text):
     return "Python {}".format(text.replace("_", " "))
 
 
