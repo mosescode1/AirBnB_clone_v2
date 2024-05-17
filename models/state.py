@@ -21,12 +21,14 @@ class State(BaseModel, Base):
                               cascade="all, delete-orphan")
         # id = Column(String(60), primary_key=True, nullable=False)
     else:
+        @property
         def cities(self):
-            from models.city import City
             import models
-            temp = {}
-            for k, v in models.storage.all(City).items():
-                if v.to_dict()["State.id"] == self.id:
-                    temp.update({k, v})
-            return temp
+            from models.city import City
+            city_list = []
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list
             # if value.to_dict()["state_id"] == self.id:
